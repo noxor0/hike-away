@@ -51,4 +51,10 @@ class Database(object):
         self.cursor.execute("SELECT * FROM User WHERE userID = %d" % (user_id))
         temp = self.cursor.fetchone()
         return User(temp[0], temp[1], temp[2], temp[3], temp [4])
+    
+    def add_user_hike(self, user_id, trail_id, liked=None):
+        self.cursor.execute("INSERT INTO User_Hike(userID, trailID, liked)\
+                             VALUES ('%s', '%s', '%d')" % (user_id, trail_id, liked))
+        self.conn.commit()
+
 
