@@ -26,27 +26,29 @@ def get_first_lvl(weight, height, level):
     return lvl
 
 # Updates user level after hike completed
-def update_usr_lvl(usr_id, trl_id):
-    # SELECT liked
-    # FROM usr_hike
-    # WHERE USR_ID == usrID && TRAIL_ID == trlID;
-    if liked != null:
-        # Too easy
-        if liked == -1:
-            # Raise level
-            if trail_lvl >= usr_lvl:
-                usr_lvl = min(10.0, trail_lvl + .5)
-            else:
-                usr_lvl = min(10.0, usr_lvl + .25)
+# def update_usr_lvl(usr_id, trl_id):
+#     # SELECT liked
+#     # FROM usr_hike
+#     # WHERE USR_ID == usrID && TRAIL_ID == trlID;
+#     if liked != null:
+#         # Too easy
+#         if liked == -1:
+#             # Raise level
+#             if trail_lvl >= usr_lvl:
+#                 usr_lvl = min(10.0, trail_lvl + .5)
+#             else:
+#                 usr_lvl = min(10.0, usr_lvl + .25)
 
-        # Too hard
-        elif liked == 1:
-            # Lower level
-            if trail_lvl <= usr_lvl:
-                usr_lvl = max(0.0, trail_lvl - .5)
-            else:
-                usr_lvl = min(10, usr_lvl - .25)
+#         # Too hard
+#         elif liked == 1:
+#             # Lower level
+#             if trail_lvl <= usr_lvl:
+#                 usr_lvl = max(0.0, trail_lvl - .5)
+#             else:
+#                 usr_lvl = min(10, usr_lvl - .25)
 
-        # Perfect
-        else:
-            # usr_lvl = trail_lvl
+#         # Perfect
+#         else:
+#             pass
+#             # usr_lvl = trail_lvl
+            
