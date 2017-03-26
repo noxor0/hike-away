@@ -1,4 +1,5 @@
 import MySQLdb
+import decimal
 
 # Returns difficulty of trail based on distance and gain
 def get_difficulty(distance, gain):
@@ -28,44 +29,58 @@ def get_first_lvl(weight, height, level):
     return lvl
 
 # Updates user level after hike completed
-# def update_usr_lvl(usr_id, trl_id):
-#
-#     # Open database
-#     # TODO migrate to driver file
-#     db = MySQLdb.connect(host="hikeaway.crmldenzgavh.us-west-2.rds.amazonaws.com",    # your host, usually localhost
-#                          user="hikeaway",         # your username
-#                          passwd="hikeaway",  # your password
-#                          db="hikeaway")        # name of the data base
-#     c = db.cursor()
-#
-#     # SELECT liked
-#     # FROM usr_hike
-#     # WHERE USR_ID == usrID && TRAIL_ID == trlID;
-#     c.execute("SELECT * FROM test")
-#     usr_lvl =
-#     c.execute("SELECT * FROM test")
-#     trail_lvl =
-#     c.execute("SELECT * FROM test")
-#     liked =
-#     if liked != null:
-#         # Too easy
-#         if liked == -1:
-#             # Raise level
-#             if trail_lvl >= usr_lvl:
-#                 usr_lvl = min(10.0, trail_lvl + .5)
-#             else:
-#                 usr_lvl = min(10.0, usr_lvl + .25)
-#
-#         # Too hard
-#         elif liked == 1:
-#             # Lower level
-#             if trail_lvl <= usr_lvl:
-#                 usr_lvl = max(0.0, trail_lvl - .5)
-#             else:
-#                 usr_lvl = min(10, usr_lvl - .25)
-#
-#         # Perfect
-#         else:
-#             usr_lvl = trail_lvl
-#
-#     db.close()
+def update_usr_lvl(usr_id, trl_id):
+
+    # Open database
+    # TODO migrate to driver file
+    db = MySQLdb.connect(host="hikeaway.crmldenzgavh.us-west-2.rds.amazonaws.com",    # your host, usually localhost
+                         user="hikeaway",         # your username
+                         passwd="hikeaway",  # your password
+                         db="hikeaway")        # name of the data base
+    c = db.cursor()
+
+    # Get levels from database
+    c.execute("SELECT skill FROM User WHERE userID = " + str(usr_id))
+    usr_lvl = c.fetchone()[0]
+    c.execute("SELECT difficulty FROM Trail WHERE trailID = '" + trl_id + "'")
+    trail_lvl = c.fetchone()[0]
+    c.execute("SELECT liked FROM User_Hike WHERE userID = " + str(usr_id) + " AND trailID = '" + trl_id + "'")
+    temp = c.fetchone()
+    if temp is None:
+        liked = None
+    else:
+        liked = temp[0]
+
+    if liked is not None:
+        # Too easy
+        if liked == -1:
+            # Raise level
+            if trail_lvl >= usr_lvl:
+                usr_lvl = min(10.0, trail_lvl + decimal.Decimal(.5))
+            else:
+                usr_lvl = min(10.0, usr_lvl + decimal.Decimal(.25))
+
+        # Too hard
+        elif liked == 1:
+            # Lower level
+            if trail_lvl <= usr_lvl:
+                usr_lvl = max(0.0, trail_lvl - decimal.Decimal(.5))
+            else:
+                usr_lvl = min(10, usr_lvl - decimal.Decimal(.25))
+
+        # Perfect
+        else:
+            if trail_lvl > (usr_lvl + decimal.Decimal(.2)):
+                usr_lvl = min(10.0, trail_lvl)
+            elif trail_lvl < (usr_lvl - decimal.Decimal(.2)):
+                usr_lvl = max(0.0, trail_lvl)
+            else:
+                usr_lvl = trail_lvl
+    print usr_lvl
+    c.execute("UPDATE User SET skill = " + str(usr_lvl) + " WHERE userID = " + str(usr_id))
+
+    db.commit()
+    db.close()
+
+
+update_usr_lvl(2, 'cascade-trail')
