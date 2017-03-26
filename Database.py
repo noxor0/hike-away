@@ -2,7 +2,7 @@ import MySQLdb
 import json
 from decimal import Decimal
 from eqs import get_difficulty
-
+from Hike import Hike
 class Database(object):
     def __init__(self):
         self.conn = MySQLdb.connect(host="hikeaway.crmldenzgavh.us-west-2.rds.amazonaws.com",    # your host, usually localhost
@@ -36,5 +36,15 @@ class Database(object):
             except:
                 pass
         self.conn.close()
+    def get_hikes(self, user_id=1):
+        hikes = []
+        self.cursor.execute("SELECT trailID, trailName, difficulty, lat, lng \
+                            FROM Trail t WHERE trailID NOT IN (SELECT trailID FROM User_Hike WHERE userID = %d);" % (user_id))
+        result = self.cursor.fetchall()
+        for hike in result:
+            temp = Hike(hike[0], hike[1], hike[2], hike[3], hike[4])
+            hikes.append(temp)
+
+        return hikes
 test = Database()
-test.add_trails()
+test.get_hikes()
