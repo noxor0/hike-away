@@ -60,8 +60,8 @@ class Database(object):
         return User(temp[0], temp[1], temp[2], temp[3], temp [4])
 
     def add_user_hike(self, user_id, trail_id, liked=None):
-        self.cursor.execute("INSERT INTO User_Hike(userID, trailID, liked)\
-                             VALUES ('%s', '%s', '%d')" % (user_id, trail_id, liked))
+        self.cursor.execute("INSERT INTO User_Hike(userID, trailID)\
+                             VALUES ('%s', '%s')" % (user_id, trail_id))
         self.conn.commit()
 
     def get_trail_difficulty(self, trail_id):
@@ -74,6 +74,10 @@ class Database(object):
 
     def update_user_level(self, user_id, user_skill):
         self.cursor.execute("UPDATE User SET skill = " + str(user_skill) + " WHERE userID = " + str(user_id))
+
+        self.conn.commit()
+    def update_user_hike(self, user_id, trail_id, liked):
+        self.cursor.execute("UPDATE User_Hike SET liked = " + str(liked) + " WHERE userID = " + str(user_id)+ " AND trailID = '" + trail_id + "'")
 
         self.conn.commit()
     
