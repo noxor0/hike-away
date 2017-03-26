@@ -2,7 +2,7 @@ import MySQLdb
 import json
 from decimal import Decimal
 from eqs import get_difficulty
-from Hike import Hike
+from Hike import Hike, User
 class Database(object):
     def __init__(self):
         self.conn = MySQLdb.connect(host="hikeaway.crmldenzgavh.us-west-2.rds.amazonaws.com",    # your host, usually localhost
@@ -46,5 +46,9 @@ class Database(object):
             hikes.append(temp)
 
         return hikes
-test = Database()
-test.get_hikes()
+
+    def get_user(self, id):
+        return User(1, "Connor", 7.0, 42.333, -122.3000)
+
+# test = Database()
+# test.get_hikes()
