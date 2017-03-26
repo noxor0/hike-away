@@ -1,6 +1,7 @@
 import MySQLdb
 import decimal
-
+from Database import Database
+db = Database()
 # Returns difficulty of trail based on distance and gain
 def get_difficulty(distance, gain):
     # TODO handle null and negative input
@@ -33,19 +34,19 @@ def update_usr_lvl(usr_id, trl_id):
 
     # Open database
     # TODO migrate to driver file
-    db = MySQLdb.connect(host="hikeaway.crmldenzgavh.us-west-2.rds.amazonaws.com",    # your host, usually localhost
-                         user="hikeaway",         # your username
-                         passwd="hikeaway",  # your password
-                         db="hikeaway")        # name of the data base
-    c = db.cursor()
+    # db = MySQLdb.connect(host="hikeaway.crmldenzgavh.us-west-2.rds.amazonaws.com",    # your host, usually localhost
+    #                      user="hikeaway",         # your username
+    #                      passwd="hikeaway",  # your password
+    #                      db="hikeaway")        # name of the data base
+    # c = db.cursor()
 
     # Get levels from database
-    c.execute("SELECT skill FROM User WHERE userID = " + str(usr_id))
-    usr_lvl = c.fetchone()[0]
-    c.execute("SELECT difficulty FROM Trail WHERE trailID = '" + trl_id + "'")
-    trail_lvl = c.fetchone()[0]
-    c.execute("SELECT liked FROM User_Hike WHERE userID = " + str(usr_id) + " AND trailID = '" + trl_id + "'")
-    temp = c.fetchone()
+    # c.execute("SELECT skill FROM User WHERE userID = " + str(usr_id))
+    usr_lvl = db.get_user(usr_id).skill
+    # c.execute("SELECT difficulty FROM Trail WHERE trailID = '" + trl_id + "'")
+    trail_lvl = db. get_trail_difficulty #c.fetchone()[0]
+    # c.execute("SELECT liked FROM User_Hike WHERE userID = " + str(usr_id) + " AND trailID = '" + trl_id + "'")
+    temp = db.get_liked_trails(usr_id, trl_id)
     if temp is None:
         liked = None
     else:
@@ -77,10 +78,11 @@ def update_usr_lvl(usr_id, trl_id):
             else:
                 usr_lvl = trail_lvl
     print usr_lvl
-    c.execute("UPDATE User SET skill = " + str(usr_lvl) + " WHERE userID = " + str(usr_id))
+    db.update_user_level(usr_id, usr_lvl)
+    # c.execute("UPDATE User SET skill = " + str(usr_lvl) + " WHERE userID = " + str(usr_id))
 
-    db.commit()
-    db.close()
+    # db.commit()
+    # db.close()
 
 
 update_usr_lvl(2, 'cascade-trail')

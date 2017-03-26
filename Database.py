@@ -51,10 +51,23 @@ class Database(object):
         self.cursor.execute("SELECT * FROM User WHERE userID = %d" % (user_id))
         temp = self.cursor.fetchone()
         return User(temp[0], temp[1], temp[2], temp[3], temp [4])
-    
+
     def add_user_hike(self, user_id, trail_id, liked=None):
         self.cursor.execute("INSERT INTO User_Hike(userID, trailID, liked)\
                              VALUES ('%s', '%s', '%d')" % (user_id, trail_id, liked))
         self.conn.commit()
 
+    def get_trail_difficulty(self, trail_id):
+        self.cursor.execute("SELECT difficulty FROM Trail WHERE trailID = '" + trail_id + "'")
+        return self.cursor.fetchone()[0]
+
+    def get_liked_trails(self, user_id, trail_id):
+        self.cursor.execute("SELECT liked FROM User_Hike WHERE userID = " + str(user_id) + " AND trailID = '" + trail_id + "'")
+        return self.cursor.fetchone()[0]
+
+    def update_user_level(self, user_id, user_skill):
+        self.cursor.execute("UPDATE User SET skill = " + str(user_skill) + " WHERE userID = " + str(user_id))
+
+        self.conn.commit()
+        
 
