@@ -76,6 +76,7 @@ class VotePage(tk.Frame):
     def __init__(self, hikes, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        self.parent = parent
         db.add_user_hike(1, hikes[0].trail_id, None)
         label = tk.Label(self, text="How Hard Was \nThe Hike", font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
@@ -83,29 +84,35 @@ class VotePage(tk.Frame):
         button2 = tk.Button(self, text="Too Hard", width=16,
                             command=lambda: self.too_hard(hikes[0]))
         button4 = tk.Button(self, text="Perfect", width=16,
-                            command=lambda: self.too_hard(hikes[0]))
+                            command=lambda: self.perfect(hikes[0]))
         button2.pack(pady=5)
         button4.pack(pady=5)
         
         button = tk.Button(self, text="Too Easy", width=16,
-                           command=lambda: self.too_hard(hikes[0]))
+                           command=lambda: self.too_easy(hikes[0]))
         button.pack()
 
     def too_hard(self, hike):
-        db.update_user_hike(1, hike.trail_id, -1)
+        db.update_user_hike(1, hike.trail_id, 1)
         # db.add_user_hike(1, hike.trail_id)
         db.update_usr_lvl(1, hike.trail_id)
+        self.parent.destroy()
         self.destroy()
+        self.controller.destroy()
     def perfect(self, hike):
         db.update_user_hike(1, hike.trail_id, 0)
         # db.add_user_hike(1, hike.trail_id)
         db.update_usr_lvl(1, hike.trail_id)
+        self.parent.destroy()
         self.destroy()
+        self.controller.destroy()
     def too_easy(self, hike):
-        db.update_user_hike(1, hike.trail_id, 1)
+        db.update_user_hike(1, hike.trail_id, -1)
         # db.add_user_hike(1, hike.trail_id)
         db.update_usr_lvl(1, hike.trail_id)
+        self.parent.destroy()
         self.destroy()
+        self.controller.destroy()
 
 
 sample = HikeBuddy()

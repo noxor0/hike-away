@@ -118,7 +118,7 @@ class Database(object):
                 if trail_lvl <= usr_lvl:
                     usr_lvl = max(0.0, trail_lvl - Decimal(.5))
                 else:
-                    usr_lvl = min(10, usr_lvl - Decimal(.25))
+                    usr_lvl = max(0.0, usr_lvl - Decimal(.25))
 
             # Perfect
             else:
@@ -135,6 +135,4 @@ class Database(object):
         # db.commit()
         # db.close()
 
-test = Database()
-test.update_usr_lvl(2, 'cascade-trail')
 
