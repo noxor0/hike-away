@@ -69,5 +69,59 @@ class Database(object):
         self.cursor.execute("UPDATE User SET skill = " + str(user_skill) + " WHERE userID = " + str(user_id))
 
         self.conn.commit()
+    
+    def update_usr_lvl(self, usr_id, trl_id):
+    
+        # Open database
+        # TODO migrate to driver file
+        # db = MySQLdb.connect(host="hikeaway.crmldenzgavh.us-west-2.rds.amazonaws.com",    # your host, usually localhost
+        #                      user="hikeaway",         # your username
+        #                      passwd="hikeaway",  # your password
+        #                      db="hikeaway")        # name of the data base
+        # c = db.cursor()
+
+        # Get levels from database
+        # c.execute("SELECT skill FROM User WHERE userID = " + str(usr_id))
+        usr_lvl = self.get_user(usr_id).skill
+        # c.execute("SELECT difficulty FROM Trail WHERE trailID = '" + trl_id + "'")
+        trail_lvl = self.get_trail_difficulty #c.fetchone()[0]
+        # c.execute("SELECT liked FROM User_Hike WHERE userID = " + str(usr_id) + " AND trailID = '" + trl_id + "'")
+        temp = self.get_liked_trails(usr_id, trl_id)
+        if temp is None:
+            liked = None
+        else:
+            liked = temp[0]
+
+        if liked is not None:
+            # Too easy
+            if liked == -1:
+                # Raise level
+                if trail_lvl >= usr_lvl:
+                    usr_lvl = min(10.0, trail_lvl + Decimal(.5))
+                else:
+                    usr_lvl = min(10.0, usr_lvl + Decimal(.25))
+
+            # Too hard
+            elif liked == 1:
+                # Lower level
+                if trail_lvl <= usr_lvl:
+                    usr_lvl = max(0.0, trail_lvl - Decimal(.5))
+                else:
+                    usr_lvl = min(10, usr_lvl - Decimal(.25))
+
+            # Perfect
+            else:
+                if trail_lvl > (usr_lvl + Decimal(.2)):
+                    usr_lvl = min(10.0, trail_lvl)
+                elif trail_lvl < (usr_lvl - Decimal(.2)):
+                    usr_lvl = max(0.0, trail_lvl)
+                else:
+                    usr_lvl = trail_lvl
+        print usr_lvl
+        self.update_user_level(usr_id, usr_lvl)
+        # c.execute("UPDATE User SET skill = " + str(usr_lvl) + " WHERE userID = " + str(usr_id))
+
+        # db.commit()
+        # db.close()
         
 
