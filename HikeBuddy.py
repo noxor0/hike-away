@@ -8,8 +8,7 @@ test_rate = [1, 5, 1]
 # TODO: Use dist formula to find hikes < 100 miles from user location
 # TODO: Suggest 3 hikes with increasing difficulty (hikes wih values +/- value)
 
-# 8===D
-class hikeBuddy():
+class HikeBuddy(object):
 # 1 degree of Longitude =
 # cosine (latitude in decimal degrees) * length of degree (miles) at equator.
     def find_distance(self, user_lat, user_long, trail_lat, trail_long):
@@ -57,5 +56,5 @@ class hikeBuddy():
             top_three.append(poss_hikes[i][0])
         return top_three
 
-hb = hikeBuddy()
+hb = HikeBuddy()
 print(hb.find_suggestions())
