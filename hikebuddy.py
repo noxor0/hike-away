@@ -53,8 +53,6 @@ class hikeBuddy():
             if(self.find_distance(user[3], user[4], hike[3], hike[4]) < 80):
                 if(abs(user[2] - hike[2]) <= 1.5):
                     poss_hikes.append([hike, abs(user[2] - hike[2])])
-
-
         for i in range(3):
             top_three.append(poss_hikes[i][0])
         return top_three
