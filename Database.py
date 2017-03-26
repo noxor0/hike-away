@@ -13,7 +13,7 @@ class Database(object):
 
         self.cursor = self.conn.cursor()
     def add_trails(self):
-        with open('hikes.json') as data_file:    
+        with open('hikes.json') as data_file:
             data = json.load(data_file)
 
         for trail in data:
