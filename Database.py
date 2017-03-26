@@ -1,7 +1,6 @@
 import MySQLdb
 import json
 from decimal import Decimal
-from eqs import get_difficulty
 from Hike import Hike, User
 class Database(object):
     def __init__(self):
@@ -25,7 +24,7 @@ class Database(object):
                     gain = 0
                 else:
                     gain = float(trail['elevGain'])
-                diff = get_difficulty(distance, gain)
+                diff = self.get_difficulty(distance, gain)
                 sql = """INSERT INTO Trail(trailID, trailName, difficulty, lat, lng) VALUES ('%s', "%s", '%3.1f', '%7.4f', '%7.4f')""" % (trail['id'], trail['name'], diff, lat, lng)
                 print sql
                 try:
@@ -36,6 +35,14 @@ class Database(object):
             except:
                 pass
         self.conn.close()
+    def get_difficulty(self, distance, gain):
+        print str(distance) + " " + str(gain)
+        dist = distance * 5280.0 # Convert from miles to feet
+        d = dist / 20000
+        g = gain / 2000.0
+        s = (gain * 20) / dist
+        difficulty = d + g + s
+        return min(10.0, difficulty)
     def get_hikes(self, user_id=1):
         hikes = []
         self.cursor.execute("SELECT trailID, trailName, difficulty, lat, lng \
