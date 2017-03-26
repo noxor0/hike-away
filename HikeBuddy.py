@@ -3,12 +3,10 @@ from Database import Database
 
 #db.getHikes()
 #db.getUser(userID)
-db = Database()
-
-#this value is passed in from todd
-curr_user = db.get_user(1)
 
 class HikeBuddy(object):
+    db = Database()
+    curr_user = db.get_user(1)
 # 1 degree of Longitude =
 # cosine (latitude in decimal degrees) * length of degree (miles) at equator.
     def find_distance(self, user_lat, user_long, trail_lat, trail_long):
@@ -45,9 +43,3 @@ class HikeBuddy(object):
         for i in range(3):
             top_three.append(poss_hikes[i][0])
         return top_three
-
-hb = HikeBuddy()
-
-hikes = hb.find_suggestions()
-for hike in hikes:
-    print hike.name, hike.difficulty
