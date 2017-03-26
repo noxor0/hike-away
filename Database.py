@@ -47,8 +47,8 @@ class Database(object):
 
         return hikes
 
-    def get_user(self, id):
-        return User(1, "Connor", 7.0, 42.333, -122.3000)
+    def get_user(self, user_id=1):
+        self.cursor.execute("SELECT * FROM User WHERE userID = %d" % (user_id))
+        temp = self.cursor.fetchone()
+        return User(temp[0], temp[1], temp[2], temp[3], temp [4])
 
-# test = Database()
-# test.get_hikes()
