@@ -91,13 +91,13 @@ class Database(object):
         # c.execute("SELECT skill FROM User WHERE userID = " + str(usr_id))
         usr_lvl = self.get_user(usr_id).skill
         # c.execute("SELECT difficulty FROM Trail WHERE trailID = '" + trl_id + "'")
-        trail_lvl = self.get_trail_difficulty #c.fetchone()[0]
+        trail_lvl = self.get_trail_difficulty(trl_id) #c.fetchone()[0]
         # c.execute("SELECT liked FROM User_Hike WHERE userID = " + str(usr_id) + " AND trailID = '" + trl_id + "'")
         temp = self.get_liked_trails(usr_id, trl_id)
         if temp is None:
             liked = None
         else:
-            liked = temp[0]
+            liked = temp
 
         if liked is not None:
             # Too easy
@@ -124,11 +124,13 @@ class Database(object):
                     usr_lvl = max(0.0, trail_lvl)
                 else:
                     usr_lvl = trail_lvl
-        print usr_lvl
+
         self.update_user_level(usr_id, usr_lvl)
         # c.execute("UPDATE User SET skill = " + str(usr_lvl) + " WHERE userID = " + str(usr_id))
 
         # db.commit()
         # db.close()
-        
+
+test = Database()
+test.update_usr_lvl(2, 'cascade-trail')
 
