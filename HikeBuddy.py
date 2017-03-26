@@ -38,13 +38,19 @@ class HikeBuddy(object):
             if(self.find_distance(user.lat, user.lng, hike.lat, hike.lng) < 80):
                 if(abs(user.skill - hike.difficulty) <= 1.5):
                     poss_hikes.append([hike, abs(user.skill - hike.difficulty)])
+                    print abs(user.skill - hike.difficulty)
 
         if(len(poss_hikes) < 3):
             return "no hikes!"
+        poss_hikes.sort(key=lambda x: x[1])
         for i in range(3):
             top_three.append(poss_hikes[i][0])
 
         return top_three
 
 hb = HikeBuddy()
-hb.find_suggestions()
+
+hikes = hb.find_suggestions()
+print curr_user.skill
+for hike in hikes:
+    print hike.name, hike.difficulty
