@@ -3,10 +3,9 @@ from Database import Database
 
 #db.getHikes()
 #db.getUser(userID)
+db = Database()
 
 class HikeBuddy(object):
-    db = Database()
-    curr_user = db.get_user(1)
 # 1 degree of Longitude =
 # cosine (latitude in decimal degrees) * length of degree (miles) at equator.
     def find_distance(self, user_lat, user_long, trail_lat, trail_long):
@@ -28,7 +27,7 @@ class HikeBuddy(object):
         poss_hikes = []
         top_three = []
 
-        user = curr_user
+        user = db.get_user(1)
         local_hikes = db.get_hikes()
 
         # find hikes within 80 miles
