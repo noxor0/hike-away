@@ -1,5 +1,4 @@
 from math import radians, sin, cos, sqrt, atan2
-import bisect
 
 # userID name skillLevel lat long
 test_user = [5, "Connor", 3.1, 42.000, -122.000]
